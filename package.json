@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/sschadwick/ihme-obesity-prevalence#readme",
   "dependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "fstream": "^1.0.8",
+    "unzip": "^0.1.11"
   }
 }
