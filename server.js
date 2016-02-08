@@ -7,10 +7,10 @@ var fs = require('fs');
 var fstream = require('fstream');
 var url = require('url');
 
-app.use(express.static('public'));
-
 var readStream = fs.createReadStream('public/IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.zip');
 var writeStream = fstream.Writer('public/');
+
+app.use(express.static('public'));
 
 readStream
   .pipe(unzip.Parse())
