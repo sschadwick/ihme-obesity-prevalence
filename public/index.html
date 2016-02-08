@@ -9,7 +9,6 @@
 #chart text {
   fill: black;
   font: 10px sans-serif;
-  text-anchor: end;
 }
 
 .axis path,
@@ -53,7 +52,7 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.csv', function(cs
     // remove any prior visualization
     while (chart.firstChild) {
       chart.removeChild(chart.firstChild);
-    };
+    }
 
   var data = d3.nest()
     .key(function(d) { return d.year; })
@@ -124,13 +123,12 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.csv', function(cs
 
   // Title
   svg.append('text')
-    .attr('x', w * (3/4))
+    .attr('x', w / 2 )
     .attr('y', (margin.top / 2))
-    .attr('text-align', 'center')
+    .attr('text-anchor', 'middle')
     .style('font-size', '16px')
     .style('text-decoration', 'underline')
-    .style('text-decoration', 'bold')
-    .text('International Prevalence of Overweight and Obese Males/Females for 1990-2013');
+    .text('International Prevalence of Overweight and Obese Males/Females for Years 1990-2013');
   }
 
   gender.addEventListener('change', function() {
