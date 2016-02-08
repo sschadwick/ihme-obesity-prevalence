@@ -63,20 +63,20 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.csv', function(cs
     var meanArr = [];
     for (var i in data) { // for each year..
       meanArr.push(d3.mean(data[i].values.filter(function(d) {
-              return d.sex == gender.value;
-            }).map(function(d) {
-              return +d.mean; // find avg mean
-            })));
+        return d.sex == gender.value;
+      }).map(function(d) {
+        return +d.mean; // find avg mean
+      })));
     }
 
   // SVG container
   var svg = d3.select('#chart')
-      .attr({
-          'width': w + (margin.left + margin.right),
-          'height': h + (margin.top + margin.bottom)
-      })
-      .append('g')
-      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    .attr({
+        'width': w + (margin.left + margin.right),
+        'height': h + (margin.top + margin.bottom)
+    })
+    .append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   var x = d3.scale.ordinal().rangeRoundBands([0, w], 0.1)
     .domain(data.map(function(d) { return d.key; }));
@@ -87,14 +87,14 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.csv', function(cs
 
   // Axes
   var xAxis = d3.svg.axis()
-                .scale(x)
-                .orient('bottom')
-                .ticks(data.length);
+    .scale(x)
+    .orient('bottom')
+    .ticks(data.length);
 
   var yAxis = d3.svg.axis()
-                .scale(y)
-                .orient('left')
-                .ticks(4);
+    .scale(y)
+    .orient('left')
+    .ticks(4);
 
   svg.append('g')
     .attr('class', 'axis')
@@ -109,18 +109,28 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.csv', function(cs
     .attr('y', 6)
     .attr('dy', '.71em')
     .style('text-anchor', 'end')
-    .text('International Obesity Prevalence');
+    .text('Prevalence (Frequency)');
 
   // Bars
   svg.selectAll('bar')
-      .data(data)
-      .enter()
-      .append('rect')
-      .attr('class', 'bar')
-      .attr('x', function(d, i) { return x(d.key); })
-      .attr('width', x.rangeBand())
-      .attr('y', function(d, i) { return y(meanArr[i]); }) // y value of bar
-      .attr('height', function(d, i) {return h - y(meanArr[i]); }); // bar height
+    .data(data)
+    .enter()
+    .append('rect')
+    .attr('class', 'bar')
+    .attr('x', function(d, i) { return x(d.key); })
+    .attr('width', x.rangeBand())
+    .attr('y', function(d, i) { return y(meanArr[i]); }) // y value of bar
+    .attr('height', function(d, i) {return h - y(meanArr[i]); }); // bar height
+
+  // Title
+  svg.append('text')
+    .attr('x', w * (3/4))
+    .attr('y', (margin.top / 2))
+    .attr('text-align', 'center')
+    .style('font-size', '16px')
+    .style('text-decoration', 'underline')
+    .style('text-decoration', 'bold')
+    .text('International Prevalence of Overweight and Obese Males/Females for 1990-2013');
   }
 
   gender.addEventListener('change', function() {
