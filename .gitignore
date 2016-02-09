@@ -1,1 +1,3 @@
 node_modules
+*.CSV
+public/readme.txt

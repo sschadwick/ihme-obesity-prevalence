@@ -28,11 +28,14 @@
   <option value='male' selected>Males</option>
   <option value='female'>Females</option>
   <option value='both'>Males and Females</option>
-</select> that are: 
+</select> that are 
 <select id='metric'>
   <option value='overweight' selected>Overweight</option>
   <option value='obese'>Obese</option>
   <option value='both' >Overweight and Obese</option>
+</select> in 
+<select id='country'>
+  <option value='all' selected>All Countries</option>
 </select>
 </br>
 <svg id='chart'></svg>
@@ -51,8 +54,21 @@ var h = window.innerHeight - 2 * (margin.top + margin.bottom);
 var chart = document.getElementById('chart');
 var gender = document.getElementById('gender');
 var metric = document.getElementById('metric');
+var country = document.getElementById('country');
 
 d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.CSV', function(csv) {
+  var countryData = d3.nest()
+    .key(function(d) { return d.location_name; })
+    .sortKeys(d3.ascending)
+    .entries(csv);
+
+  // populate country select tag
+  for (var i in countryData) {
+    var option = document.createElement('option');
+    option.text = countryData[i].key;
+    option.value = countryData[i].key;
+    country.add(option);
+  }
 
   function initGraph() {    
 
@@ -61,10 +77,10 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.CSV', function(cs
       chart.removeChild(chart.firstChild);
     }
 
-  var data = d3.nest()
-    .key(function(d) { return d.year; })
-    .sortKeys(d3.ascending)
-    .entries(csv);
+    var data = d3.nest()
+      .key(function(d) { return d.year; })
+      .sortKeys(d3.ascending)
+      .entries(csv);
 
     var meanArr = [];
     for (var i in data) { // for each year..
@@ -73,6 +89,9 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.CSV', function(cs
       }).filter(function(d) {
         if (metric.value == 'both') { return true; }
         return d.metric == metric.value;
+      }).filter(function(d) {
+        if (country.value == 'all') { return true; }
+        return d.location_name == country.value;
       }).map(function(d) {
         return +d.mean; // find avg mean
       })));
@@ -156,8 +175,11 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.CSV', function(cs
     initGraph();
   });
 
+  country.addEventListener('change', function() {
+    initGraph();
+  });
+
   initGraph();
 });
-
 
 </script>
