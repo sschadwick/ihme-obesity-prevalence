@@ -36,7 +36,7 @@
 var margin = {
   top: 20,
   left: 40,
-  bottom: 30,
+  bottom: 40,
   right: 20
 };
 var w = window.innerWidth - (margin.left + margin.right);
@@ -101,7 +101,7 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.csv', function(cs
     .call(xAxis)
     .append('text')
     .attr('x', w / 2)
-    .attr('y', 1.5 * margin.top)
+    .attr('y', 2 * margin.top)
     .style('font-size', '14px')
     .style('text-anchor', 'middle')
     .text('Year');
