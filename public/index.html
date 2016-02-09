@@ -25,10 +25,16 @@
 
 </style>
 <select id='gender'>
-  <option value='male' selected>Male</option>
-  <option value='female'>Female</option>
-  <option value='both'>Both</option>
-</select></br>
+  <option value='male' selected>Males</option>
+  <option value='female'>Females</option>
+  <option value='both'>Males and Females</option>
+</select> that are: 
+<select id='metric'>
+  <option value='overweight' selected>Overweight</option>
+  <option value='obese'>Obese</option>
+  <option value='both' >Overweight and Obese</option>
+</select>
+</br>
 <svg id='chart'></svg>
 <script src='//d3js.org/d3.v3.min.js' charset='utf-8'></script>
 <script>
@@ -42,8 +48,9 @@ var margin = {
 var w = window.innerWidth - (margin.left + margin.right);
 var h = window.innerHeight - 2 * (margin.top + margin.bottom);
 
-var gender = document.getElementById('gender');
 var chart = document.getElementById('chart');
+var gender = document.getElementById('gender');
+var metric = document.getElementById('metric');
 
 d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.CSV', function(csv) {
 
@@ -63,6 +70,9 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.CSV', function(cs
     for (var i in data) { // for each year..
       meanArr.push(d3.mean(data[i].values.filter(function(d) {
         return d.sex == gender.value;
+      }).filter(function(d) {
+        if (metric.value == 'both') { return true; }
+        return d.metric == metric.value;
       }).map(function(d) {
         return +d.mean; // find avg mean
       })));
@@ -82,7 +92,7 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.CSV', function(cs
   
   var y = d3.scale.linear()
     .range([h, 0])
-    .domain([0.2, 0.33]);
+    .domain([d3.min(meanArr) - 0.01, d3.max(meanArr) + 0.01]);
 
   // Axes
   var xAxis = d3.svg.axis()
@@ -139,6 +149,10 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.CSV', function(cs
   }
 
   gender.addEventListener('change', function() {
+    initGraph();
+  });
+
+  metric.addEventListener('change', function() {
     initGraph();
   });
 
