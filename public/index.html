@@ -31,7 +31,7 @@
 </select> that are 
 <select id='metric'>
   <option value='both' selected>Overweight and Obese</option>
-  <option value='overweight' >Overweight</option>
+  <option value='overweight'>Overweight</option>
   <option value='obese'>Obese</option>
 </select> in 
 <select id='country'>
@@ -157,6 +157,11 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.CSV', function(cs
     .attr('y', function(d, i) { return y(meanArr[i]); }) // y value of bar
     .attr('height', function(d, i) {return h - y(meanArr[i]); }); // bar height
 
+  // Dynamic Title
+  var genderText = gender.options[gender.selectedIndex].text;
+  var metricText = metric.options[metric.selectedIndex].text;
+  var countryText = country.options[country.selectedIndex].text;
+
   // Title
   svg.append('text')
     .attr('x', w / 2 )
@@ -164,7 +169,7 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.CSV', function(cs
     .style('text-anchor', 'middle')
     .style('font-size', '16px')
     .style('text-decoration', 'underline')
-    .text('Average Prevalence of Overweight and Obese Males/Females for Years 1990-2013');
+    .text('Average Prevalence of ' + metricText + ' ' + genderText + ' in ' + countryText + ' for Years 1990-2013');
   }
 
   gender.addEventListener('change', function() {
