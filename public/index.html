@@ -82,7 +82,7 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.csv', function(cs
   
   var y = d3.scale.linear()
     .range([h, 0])
-    .domain([0.2, 0.4]);
+    .domain([0.2, 0.33]);
 
   // Axes
   var xAxis = d3.svg.axis()
@@ -97,8 +97,14 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.csv', function(cs
 
   svg.append('g')
     .attr('class', 'axis')
-    .attr('transform', 'translate(0,' + (h) + ')')
-    .call(xAxis);
+    .attr('transform', 'translate(0,' + h + ')')
+    .call(xAxis)
+    .append('text')
+    .attr('x', w / 2)
+    .attr('y', 1.5 * margin.top)
+    .style('font-size', '14px')
+    .style('text-anchor', 'middle')
+    .text('Year');
 
   svg.append('g')
     .attr('class', 'axis')
@@ -107,6 +113,7 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.csv', function(cs
     .attr('transform', 'rotate(-90)')
     .attr('y', 6)
     .attr('dy', '.71em')
+    .style('font-size', '14px')
     .style('text-anchor', 'end')
     .text('Prevalence (Frequency)');
 
@@ -125,10 +132,10 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.csv', function(cs
   svg.append('text')
     .attr('x', w / 2 )
     .attr('y', (margin.top / 2))
-    .attr('text-anchor', 'middle')
+    .style('text-anchor', 'middle')
     .style('font-size', '16px')
     .style('text-decoration', 'underline')
-    .text('International Prevalence of Overweight and Obese Males/Females for Years 1990-2013');
+    .text('Average Prevalence of Overweight and Obese Males/Females for Years 1990-2013');
   }
 
   gender.addEventListener('change', function() {
