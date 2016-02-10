@@ -37,6 +37,10 @@
 <select id='country'>
   <option value='all' selected>All Countries</option>
 </select>
+<select id='scale' style='float:right'>
+  <option value='relative'>Relative Scale</option>
+  <option value='absolute'>Absolute Scale</option>
+</select>
 </br>
 <svg id='chart'></svg>
 <script src='//d3js.org/d3.v3.min.js' charset='utf-8'></script>
@@ -55,6 +59,7 @@ var chart = document.getElementById('chart');
 var gender = document.getElementById('gender');
 var metric = document.getElementById('metric');
 var country = document.getElementById('country');
+var scale = document.getElementById('scale');
 
 d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.CSV', function(csv) {
   var countryData = d3.nest()
@@ -109,9 +114,13 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.CSV', function(cs
   var x = d3.scale.ordinal().rangeRoundBands([0, w], 0.1)
     .domain(data.map(function(d) { return d.key; }));
   
+  var domain = [];
+  if (scale.value == 'relative') { domain = [d3.min(meanArr) - 0.01, d3.max(meanArr) + 0.01]; }
+  if (scale.value == 'absolute') { domain = [0, 1]; }
+
   var y = d3.scale.linear()
     .range([h, 0])
-    .domain([d3.min(meanArr) - 0.01, d3.max(meanArr) + 0.01]);
+    .domain(domain);
 
   // Axes
   var xAxis = d3.svg.axis()
@@ -172,6 +181,7 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.CSV', function(cs
     .text('Average Prevalence of ' + metricText + ' ' + genderText + ' in ' + countryText + ' for Years 1990-2013');
   }
 
+  // Event Listeners
   gender.addEventListener('change', function() {
     initGraph();
   });
@@ -181,6 +191,10 @@ d3.csv('IHME_GBD_2013_OBESITY_PREVALENCE_1990_2013_Y2014M10D08.CSV', function(cs
   });
 
   country.addEventListener('change', function() {
+    initGraph();
+  });
+
+  scale.addEventListener('change', function() {
     initGraph();
   });
 
